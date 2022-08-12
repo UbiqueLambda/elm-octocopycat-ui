@@ -8,7 +8,7 @@
     "dependencies": {
         "direct": {
             "UbiqueLambda/elm-with-ui": "1.0.0",
-            "UbiqueLambda/elm-with-ui-html": "1.0.0",
+            "UbiqueLambda/elm-with-ui-html": "1.0.1",
             "elm/browser": "1.0.2",
             "elm/core": "1.0.5"
         },

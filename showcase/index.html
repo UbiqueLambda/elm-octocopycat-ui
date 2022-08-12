@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <style>body { padding: 0; margin: 0; }</style>
+  </head>
+
+  <body>
+    <pre id="elm"></pre>
+    <script>
+      var appConfig =
+        { node: document.getElementById("elm")
+        , flags: { innerWidth: window.innerWidth, innerHeight: window.innerHeight }
+        };
+      var appRun =
+        fetch("/src/Web.elm")
+          .then(response => response.text())
+          .then(str => new window.DOMParser().parseFromString(str, "text/html"))
+          .then(data => {
+            eval(data.body.children[1].innerHTML.replace("Elm.Web.init(", "Elm.Web // ("));
+            return app.init(appConfig);
+          });
+  </script>
+  </body>
+</html>

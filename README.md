@@ -7,4 +7,4 @@ This is not inteded for real use (though the API is meant to be stable), you sho
 
 ## Preview
 
-Run `yarn run showcase`, then pick 'src/Web.elm'.
+Run `yarn run showcase`, then open 'http://localhost:8000/index.html' in a web browser.

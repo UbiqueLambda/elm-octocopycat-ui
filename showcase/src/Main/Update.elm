@@ -15,5 +15,15 @@ update msg model =
             in
             ( { model | document = document }, Cmd.none )
 
+        OnResize newWidth newHeight ->
+            ( { model
+                | renderConfig =
+                    DS.renderConfigOnResize
+                        { deviceWidth = newWidth, deviceHeight = newHeight }
+                        model.renderConfig
+              }
+            , Cmd.none
+            )
+
         ToDo ->
             ( model, Cmd.none )

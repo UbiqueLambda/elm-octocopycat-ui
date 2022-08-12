@@ -6,7 +6,9 @@ import Pages.Home.Model as Home
 
 
 type alias Flags =
-    {}
+    { innerWidth : Int
+    , innerHeight : Int
+    }
 
 
 type alias Model =
@@ -21,9 +23,9 @@ type Pages
 
 
 init : Flags -> ( Model, Cmd Msg )
-init _ =
+init { innerWidth, innerHeight } =
     ( { document = DS.documentInit
-      , renderConfig = DS.renderConfigInit { deviceWidth = 1920, deviceHeight = 1080 }
+      , renderConfig = DS.renderConfigInit { deviceWidth = innerWidth, deviceHeight = innerHeight }
       , page = Home Home.init
       }
     , Cmd.none

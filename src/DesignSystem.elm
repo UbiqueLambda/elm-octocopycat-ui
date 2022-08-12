@@ -5,12 +5,17 @@ module DesignSystem exposing
     , DocumentMsg
     , Page
     , RenderConfig
+    , background200
+    , background600
+    , backgroundColor
+    , borderWithColor
     , document
     , documentInit
     , documentToElmDocument
     , documentUpdate
     , page
     , renderConfigInit
+    , renderConfigOnResize
     )
 
 import Internals.Document as IDocument
@@ -50,6 +55,10 @@ renderConfigInit =
     IRenderConfig.init
 
 
+renderConfigOnResize =
+    IRenderConfig.onResize
+
+
 document =
     IDocument.document
 
@@ -68,3 +77,19 @@ documentUpdate =
 
 documentToElmDocument =
     IDocument.toElmDocument
+
+
+backgroundColor =
+    IPalette.backgroundColor
+
+
+background600 =
+    IPalette.background600
+
+
+background200 =
+    IPalette.background200
+
+
+borderWithColor =
+    IPalette.borderWithColor

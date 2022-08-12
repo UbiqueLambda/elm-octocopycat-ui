@@ -1,11 +1,13 @@
 module Internals.RenderConfig exposing
     ( HueStages
-    , Locale
     , RenderConfig(..)
+    , Terms
     , Theme
     , getDeviceHeight
     , getDeviceWidth
+    , getTerms
     , init
+    , onResize
     )
 
 import UI
@@ -16,7 +18,7 @@ type RenderConfig
         { theme : Theme
         , deviceWidth : Int
         , deviceHeight : Int
-        , locale : Locale
+        , terms : Terms
         }
 
 
@@ -24,9 +26,18 @@ init : { deviceWidth : Int, deviceHeight : Int } -> RenderConfig
 init { deviceWidth, deviceHeight } =
     RenderConfig
         { theme = defaultTheme
-        , locale = defaultLocale
+        , terms = defaultTerms
         , deviceWidth = deviceWidth
         , deviceHeight = deviceHeight
+        }
+
+
+onResize : { deviceWidth : Int, deviceHeight : Int } -> RenderConfig -> RenderConfig
+onResize { deviceWidth, deviceHeight } (RenderConfig config) =
+    RenderConfig
+        { config
+            | deviceWidth = deviceWidth
+            , deviceHeight = deviceHeight
         }
 
 
@@ -40,8 +51,19 @@ getDeviceHeight (RenderConfig { deviceHeight }) =
     deviceHeight
 
 
-type alias Locale =
-    { terms : String }
+getTerms : RenderConfig -> Terms
+getTerms (RenderConfig { terms }) =
+    terms
+
+
+{-| To be replaced by auto-generated i18n
+-}
+type alias Terms =
+    { core : String
+    , basics : String
+    , complex : String
+    , layout : String
+    }
 
 
 type alias Theme =
@@ -62,8 +84,12 @@ type alias HueStages =
     }
 
 
-defaultLocale =
-    { terms = "" }
+defaultTerms =
+    { core = "Core"
+    , basics = "Basics"
+    , complex = "Complex"
+    , layout = "Layout"
+    }
 
 
 defaultTheme =
