@@ -35,10 +35,10 @@ update _ model =
 
 view : RenderConfig -> Int -> Header -> UI.Graphics Msg
 view renderConfig width _ =
-    [ UI.spanText "Components"
-    , UI.spanText "Issues"
-    , UI.spanText "Marketplace"
-    , UI.spanText "Explorer"
+    [ UI.spanText "Core"
+    , UI.spanText "Basics"
+    , UI.spanText "Complex"
+    , UI.spanText "Layout"
     ]
         |> List.map (UI.withAlignSelf UI.center)
         |> UI.indexedRow
