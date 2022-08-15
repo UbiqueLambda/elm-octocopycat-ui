@@ -1,5 +1,17 @@
-module Internals.Document exposing (Document, Model, Msg, Page, document, init, page, toElmDocument, update)
+module Internals.Document exposing
+    ( Document
+    , Model
+    , Msg
+    , Page
+    , document
+    , init
+    , page
+    , pageWithDialog
+    , toElmDocument
+    , update
+    )
 
+import Internals.Dialog as Dialog exposing (Dialog)
 import Internals.Effects as Effects exposing (Effects)
 import Internals.Footer as Footer exposing (Footer)
 import Internals.Header as Header exposing (Header)
@@ -33,7 +45,7 @@ type Page msg
     = Page
         { title : String
         , view : UI.Graphics msg
-        , dialog : Maybe (UI.Graphics msg)
+        , dialog : Maybe (Dialog msg)
         , standardSections : Bool -- header and footer
         }
 
@@ -69,6 +81,11 @@ page title view =
         }
 
 
+pageWithDialog : Maybe (Dialog msg) -> Page msg -> Page msg
+pageWithDialog dialog (Page page_) =
+    Page { page_ | dialog = dialog }
+
+
 toElmDocument :
     (UI.Graphics msg -> view)
     -> RenderConfig
@@ -96,21 +113,37 @@ toElmDocument encoder renderConfig (Document toParentMsg { header, footer }) pag
 
         (Page page_) =
             pageFn bodyCanvas
+
+        contentView =
+            UI.column
+                [ Header.view renderConfig deviceWidth header
+                    |> UI.map (ForHeader >> toParentMsg)
+                    |> Tuple.pair "header"
+                , ( "body", page_.view )
+                , Footer.view renderConfig deviceWidth footer
+                    |> UI.map (ForFooter >> toParentMsg)
+                    |> Tuple.pair "footer"
+                ]
+                |> UI.withWidth deviceWidth
+                |> UI.withHeight deviceHeight
+                |> UI.withScrollingY (Just UI.scrollInsetAlwaysVisible)
+                |> Tuple.pair "content"
+
+        contentWithDialog =
+            case page_.dialog of
+                Just dialog_ ->
+                    [ contentView
+                    , dialogOverlay renderConfig deviceWidth deviceHeight
+                    , Dialog.view renderConfig deviceWidth deviceHeight dialog_
+                    ]
+
+                Nothing ->
+                    [ contentView ]
     in
     { title = page_.title
     , body =
-        UI.column
-            [ Header.view renderConfig deviceWidth header
-                |> UI.map (ForHeader >> toParentMsg)
-                |> Tuple.pair "header"
-            , ( "body", page_.view )
-            , Footer.view renderConfig deviceWidth footer
-                |> UI.map (ForFooter >> toParentMsg)
-                |> Tuple.pair "footer"
-            ]
-            |> UI.withWidth deviceWidth
-            |> UI.withHeight deviceHeight
-            |> UI.withScrollingY (Just UI.scrollInsetAlwaysVisible)
+        contentWithDialog
+            |> UI.stack
             |> UI.withFontFamilies
                 [ "-apple-system"
                 , "BlinkMacSystemFont"
@@ -119,7 +152,17 @@ toElmDocument encoder renderConfig (Document toParentMsg { header, footer }) pag
                 , "Arial"
                 ]
                 UI.sansSerif
+            |> UI.withJustifyItems UI.center
             |> Palette.withFontColor renderConfig genericWhite
             |> UI.withBackground (Palette.backgroundColor renderConfig background800 |> Just)
             |> encoder
     }
+
+
+dialogOverlay : RenderConfig -> Int -> Int -> ( String, UI.Graphics msg )
+dialogOverlay renderConfig deviceWidth deviceHeight =
+    UI.empty
+        |> UI.withWidth deviceWidth
+        |> UI.withHeight deviceHeight
+        |> UI.withBackground (Palette.backgroundColor renderConfig background800 |> Just)
+        |> Tuple.pair "overlay"

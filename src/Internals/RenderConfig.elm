@@ -73,6 +73,7 @@ type alias Theme =
     , success : HueStages
     , genericBlack : UI.Color
     , genericWhite : UI.Color
+    , tabShadow : UI.Color
     }
 
 
@@ -100,23 +101,24 @@ defaultTheme =
         , shade200 = UI.intRGBA 0x21262DFF
         }
     , primary =
-        { shade800 = UI.intRGBA 0xFF
-        , shade600 = UI.intRGBA 0xFF
-        , shade400 = UI.intRGBA 0xFF
-        , shade200 = UI.intRGBA 0xFF
+        { shade800 = UI.intRGBA 0x132339FF
+        , shade600 = UI.intRGBA 0x214C87FF
+        , shade400 = UI.intRGBA 0x549EF5FF
+        , shade200 = UI.intRGBA 0x58A6FFFF
         }
     , danger =
-        { shade800 = UI.intRGBA 0xFF
-        , shade600 = UI.intRGBA 0xFF
-        , shade400 = UI.intRGBA 0xFF
-        , shade200 = UI.intRGBA 0xFF
+        { shade800 = UI.intRGBA 0x6B2A2BFF
+        , shade600 = UI.intRGBA 0xDA3633FF
+        , shade400 = UI.intRGBA 0xF75048FF
+        , shade200 = UI.intRGBA 0xF85149FF
         }
     , success =
-        { shade800 = UI.intRGBA 0xFF
-        , shade600 = UI.intRGBA 0xFF
-        , shade400 = UI.intRGBA 0xFF
-        , shade200 = UI.intRGBA 0xFF
+        { shade800 = UI.intRGBA 0x238636FF
+        , shade600 = UI.intRGBA 0x2A943EFF
+        , shade400 = UI.intRGBA 0x2EA043FF
+        , shade200 = UI.intRGBA 0x41A956FF
         }
     , genericBlack = UI.intRGBA 0xFF
     , genericWhite = UI.intRGBA 0xFFFFFFFF
+    , tabShadow = UI.intRGBA 0xF78166FF
     }

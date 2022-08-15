@@ -1,5 +1,6 @@
 module DesignSystem exposing
     ( Canvas
+    , Dialog
     , Document
     , DocumentModel
     , DocumentMsg
@@ -9,6 +10,7 @@ module DesignSystem exposing
     , background600
     , backgroundColor
     , borderWithColor
+    , dialog
     , document
     , documentInit
     , documentToElmDocument
@@ -18,6 +20,7 @@ module DesignSystem exposing
     , renderConfigOnResize
     )
 
+import Internals.Dialog as IDialog
 import Internals.Document as IDocument
 import Internals.Palette as IPalette
 import Internals.RenderConfig as IRenderConfig
@@ -33,6 +36,10 @@ type alias Canvas =
 
 type alias RenderConfig =
     IRenderConfig.RenderConfig
+
+
+type alias Dialog msg =
+    IDialog.Dialog msg
 
 
 type alias Document msg =
@@ -59,12 +66,20 @@ renderConfigOnResize =
     IRenderConfig.onResize
 
 
+dialog =
+    IDialog.dialog
+
+
 document =
     IDocument.document
 
 
 page =
     IDocument.page
+
+
+pageWithDialog =
+    IDocument.pageWithDialog
 
 
 documentInit =

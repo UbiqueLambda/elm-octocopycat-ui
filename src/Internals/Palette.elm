@@ -32,6 +32,7 @@ module Internals.Palette exposing
     , success400
     , success600
     , success800
+    , tabShadow
     , toUI
     , withFontColor
     )
@@ -58,6 +59,7 @@ type Color
     = Color Hue Shade
     | GenericBlack
     | GenericWhite
+    | TabShadow -- Avoid having something like this
 
 
 color : Hue -> Shade -> Color
@@ -73,6 +75,11 @@ genericBlack =
 genericWhite : Color
 genericWhite =
     GenericWhite
+
+
+tabShadow : Color
+tabShadow =
+    TabShadow
 
 
 shade200 : Shade
@@ -203,6 +210,9 @@ toUI (RenderConfig { theme }) color_ =
 
         GenericBlack ->
             theme.genericBlack
+
+        TabShadow ->
+            theme.tabShadow
 
         Color Background shade ->
             shadeFromHue theme.background shade
