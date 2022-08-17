@@ -1,8 +1,8 @@
-module Internals.Button exposing (Button(..), button, toUI)
+module Internals.Button exposing (Button(..), button, toUI, withColors)
 
 import Internals.Badge exposing (Badge)
 import Internals.Icons exposing (Icon)
-import Internals.Palette as Palette
+import Internals.Palette as Palette exposing (Hue)
 import Internals.RenderConfig exposing (RenderConfig(..))
 import UI
 
@@ -30,6 +30,11 @@ button label =
         }
 
 
+withColors : Hue -> Button msg -> Button msg
+withColors newHue (Button button_) =
+    Button { button_ | hue = newHue }
+
+
 toUI : RenderConfig -> Button msg -> UI.Graphics msg
 toUI renderConfig (Button button_) =
     let
@@ -39,6 +44,7 @@ toUI renderConfig (Button button_) =
     UI.spanText button_.label
         |> UI.withFontSize 14
         |> UI.withPaddingXY 16 7
+        |> UI.withFontColor textColor
         |> UI.withBorder (UI.border1uBlack |> UI.borderWithColor borderColor |> UI.borderWithRounding 6 |> Just)
         |> UI.withBackground (UI.backgroundColor backgroundColor |> Just)
 

@@ -4,8 +4,10 @@ module DesignSystem exposing
     , Document
     , DocumentModel
     , DocumentMsg
+    , Hue
     , Page
     , RenderConfig
+    , background
     , background100
     , background200
     , background300
@@ -18,7 +20,9 @@ module DesignSystem exposing
     , borderWithColor
     , button
     , buttonToUI
+    , buttonWithColors
     , colorTabShadow
+    , danger
     , danger200
     , danger400
     , danger600
@@ -29,12 +33,15 @@ module DesignSystem exposing
     , documentToElmDocument
     , documentUpdate
     , page
+    , pageWithDialog
+    , primary
     , primary200
     , primary400
     , primary600
     , primary800
     , renderConfigInit
     , renderConfigOnResize
+    , success
     , success200
     , success400
     , success600
@@ -80,6 +87,10 @@ type alias DocumentMsg =
     IDocument.Msg
 
 
+type alias Hue =
+    IPalette.Hue
+
+
 type alias Page msg =
     IDocument.Page msg
 
@@ -98,6 +109,10 @@ button =
 
 buttonToUI =
     IButton.toUI
+
+
+buttonWithColors =
+    IButton.withColors
 
 
 dialog =
@@ -130,6 +145,10 @@ documentToElmDocument =
 
 backgroundColor =
     IPalette.backgroundColor
+
+
+background =
+    IPalette.background
 
 
 background100 =
@@ -172,6 +191,10 @@ colorTabShadow =
     IPalette.colorTabShadow
 
 
+primary =
+    IPalette.primary
+
+
 primary200 =
     IPalette.primary200
 
@@ -188,6 +211,10 @@ primary800 =
     IPalette.primary800
 
 
+danger =
+    IPalette.danger
+
+
 danger200 =
     IPalette.danger200
 
@@ -202,6 +229,10 @@ danger600 =
 
 danger800 =
     IPalette.danger800
+
+
+success =
+    IPalette.success
 
 
 success200 =

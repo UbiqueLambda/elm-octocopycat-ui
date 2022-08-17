@@ -1,7 +1,7 @@
 module Pages.Home.View exposing (view)
 
 import DesignSystem as DS exposing (background500, background700)
-import Pages.Home.Model exposing (Model)
+import Pages.Home.Model exposing (Dialog(..), Model)
 import UI
 
 
@@ -30,10 +30,15 @@ view renderConfig model canvas =
             , typoView renderConfig
             , buttonsView renderConfig
             ]
+            |> UI.withWidth (canvas.width - 382)
+            |> UI.withHeight (canvas.height - 32)
             |> UI.withPadding 16
             |> UI.withSpacing 48
+            |> UI.withScrollingX (UI.scrollInsetAlwaysVisible |> Just)
+            |> UI.withScrollingY (UI.scrollInsetAlwaysVisible |> Just)
         ]
         |> DS.page "Showcase"
+        |> DS.pageWithDialog (dialogSetup renderConfig model.dialog)
 
 
 square renderConfig color =
@@ -95,7 +100,31 @@ typoView renderConfig =
 buttonsView renderConfig =
     UI.indexedColumn
         [ UI.spanText "Buttons"
+        , UI.indexedRow
+            [ button "Background" renderConfig DS.background
+            , button "Primary" renderConfig DS.primary
+            , button "Success" renderConfig DS.success
+            , button "Danger" renderConfig DS.danger
+            ]
+            |> UI.withSpacing 16
+        ]
+        |> UI.withSpacing 16
+
+
+button label renderConfig hue =
+    UI.indexedColumn
+        [ UI.spanText label
         , DS.button "Go to Google"
+            |> DS.buttonWithColors hue
             |> DS.buttonToUI renderConfig
         ]
         |> UI.withSpacing 16
+
+
+dialogSetup renderConfig dialogModel =
+    case dialogModel of
+        Just (ButtonDemo _) ->
+            Nothing
+
+        Nothing ->
+            Nothing
