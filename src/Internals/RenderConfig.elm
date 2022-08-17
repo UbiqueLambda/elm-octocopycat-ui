@@ -1,6 +1,7 @@
 module Internals.RenderConfig exposing
-    ( HueStages
+    ( FullHueStages
     , RenderConfig(..)
+    , ShortHueStages
     , Terms
     , Theme
     , getDeviceHeight
@@ -67,20 +68,30 @@ type alias Terms =
 
 
 type alias Theme =
-    { background : HueStages
-    , primary : HueStages
-    , danger : HueStages
-    , success : HueStages
-    , genericBlack : UI.Color
-    , genericWhite : UI.Color
+    { background : FullHueStages
+    , primary : ShortHueStages
+    , danger : ShortHueStages
+    , success : ShortHueStages
     , tabShadow : UI.Color
     }
 
 
-type alias HueStages =
+type alias ShortHueStages =
     { shade200 : UI.Color
     , shade400 : UI.Color
     , shade600 : UI.Color
+    , shade800 : UI.Color
+    }
+
+
+type alias FullHueStages =
+    { shade100 : UI.Color
+    , shade200 : UI.Color
+    , shade300 : UI.Color
+    , shade400 : UI.Color
+    , shade500 : UI.Color
+    , shade600 : UI.Color
+    , shade700 : UI.Color
     , shade800 : UI.Color
     }
 
@@ -96,9 +107,13 @@ defaultTerms =
 defaultTheme =
     { background =
         { shade800 = UI.intRGBA 0x010409FF
-        , shade600 = UI.intRGBA 0x0D1117FF
-        , shade400 = UI.intRGBA 0x161B22FF
-        , shade200 = UI.intRGBA 0x21262DFF
+        , shade700 = UI.intRGBA 0x0D1117FF
+        , shade600 = UI.intRGBA 0x161B22FF
+        , shade500 = UI.intRGBA 0x21262DFF
+        , shade400 = UI.intRGBA 0x2B2A33FF
+        , shade300 = UI.intRGBA 0x30363DFF
+        , shade200 = UI.intRGBA 0x8B949EFF
+        , shade100 = UI.intRGBA 0xF0F6FCFF
         }
     , primary =
         { shade800 = UI.intRGBA 0x132339FF
@@ -118,7 +133,5 @@ defaultTheme =
         , shade400 = UI.intRGBA 0x2EA043FF
         , shade200 = UI.intRGBA 0x41A956FF
         }
-    , genericBlack = UI.intRGBA 0xFF
-    , genericWhite = UI.intRGBA 0xFFFFFFFF
     , tabShadow = UI.intRGBA 0xF78166FF
     }

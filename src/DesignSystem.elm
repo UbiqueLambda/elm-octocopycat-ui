@@ -6,20 +6,42 @@ module DesignSystem exposing
     , DocumentMsg
     , Page
     , RenderConfig
+    , background100
     , background200
+    , background300
+    , background400
+    , background500
     , background600
+    , background700
+    , background800
     , backgroundColor
     , borderWithColor
+    , button
+    , buttonToUI
+    , colorTabShadow
+    , danger200
+    , danger400
+    , danger600
+    , danger800
     , dialog
     , document
     , documentInit
     , documentToElmDocument
     , documentUpdate
     , page
+    , primary200
+    , primary400
+    , primary600
+    , primary800
     , renderConfigInit
     , renderConfigOnResize
+    , success200
+    , success400
+    , success600
+    , success800
     )
 
+import Internals.Button as IButton
 import Internals.Dialog as IDialog
 import Internals.Document as IDocument
 import Internals.Palette as IPalette
@@ -36,6 +58,10 @@ type alias Canvas =
 
 type alias RenderConfig =
     IRenderConfig.RenderConfig
+
+
+type alias Button msg =
+    IButton.Button msg
 
 
 type alias Dialog msg =
@@ -64,6 +90,14 @@ renderConfigInit =
 
 renderConfigOnResize =
     IRenderConfig.onResize
+
+
+button =
+    IButton.button
+
+
+buttonToUI =
+    IButton.toUI
 
 
 dialog =
@@ -98,13 +132,89 @@ backgroundColor =
     IPalette.backgroundColor
 
 
-background600 =
-    IPalette.background600
+background100 =
+    IPalette.background100
 
 
 background200 =
     IPalette.background200
 
 
+background300 =
+    IPalette.background300
+
+
+background400 =
+    IPalette.background400
+
+
+background500 =
+    IPalette.background500
+
+
+background600 =
+    IPalette.background600
+
+
+background700 =
+    IPalette.background700
+
+
+background800 =
+    IPalette.background800
+
+
 borderWithColor =
     IPalette.borderWithColor
+
+
+colorTabShadow =
+    IPalette.colorTabShadow
+
+
+primary200 =
+    IPalette.primary200
+
+
+primary400 =
+    IPalette.primary400
+
+
+primary600 =
+    IPalette.primary600
+
+
+primary800 =
+    IPalette.primary800
+
+
+danger200 =
+    IPalette.danger200
+
+
+danger400 =
+    IPalette.danger400
+
+
+danger600 =
+    IPalette.danger600
+
+
+danger800 =
+    IPalette.danger800
+
+
+success200 =
+    IPalette.success200
+
+
+success400 =
+    IPalette.success400
+
+
+success600 =
+    IPalette.success600
+
+
+success800 =
+    IPalette.success800

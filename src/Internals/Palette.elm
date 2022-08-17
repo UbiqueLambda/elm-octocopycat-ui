@@ -3,20 +3,23 @@ module Internals.Palette exposing
     , Hue(..)
     , Shade(..)
     , background
+    , background100
     , background200
+    , background300
     , background400
+    , background500
     , background600
+    , background700
     , background800
     , backgroundColor
     , borderWithColor
     , color
+    , colorTabShadow
     , danger
     , danger200
     , danger400
     , danger600
     , danger800
-    , genericBlack
-    , genericWhite
     , primary
     , primary200
     , primary400
@@ -32,12 +35,11 @@ module Internals.Palette exposing
     , success400
     , success600
     , success800
-    , tabShadow
     , toUI
     , withFontColor
     )
 
-import Internals.RenderConfig exposing (HueStages, RenderConfig(..))
+import Internals.RenderConfig exposing (RenderConfig(..))
 import UI
 
 
@@ -57,8 +59,10 @@ type Hue
 
 type Color
     = Color Hue Shade
-    | GenericBlack
-    | GenericWhite
+    | Background100
+    | Background300
+    | Background500
+    | Background700
     | TabShadow -- Avoid having something like this
 
 
@@ -67,18 +71,8 @@ color hue shade =
     Color hue shade
 
 
-genericBlack : Color
-genericBlack =
-    GenericBlack
-
-
-genericWhite : Color
-genericWhite =
-    GenericWhite
-
-
-tabShadow : Color
-tabShadow =
+colorTabShadow : Color
+colorTabShadow =
     TabShadow
 
 
@@ -107,9 +101,19 @@ background =
     Background
 
 
+background100 : Color
+background100 =
+    Background100
+
+
 background200 : Color
 background200 =
     Color Background Shade200
+
+
+background300 : Color
+background300 =
+    Background300
 
 
 background400 : Color
@@ -117,9 +121,19 @@ background400 =
     Color Background Shade400
 
 
+background500 : Color
+background500 =
+    Background500
+
+
 background600 : Color
 background600 =
     Color Background Shade600
+
+
+background700 : Color
+background700 =
+    Background700
 
 
 background800 : Color
@@ -205,12 +219,6 @@ success800 =
 toUI : RenderConfig -> Color -> UI.Color
 toUI (RenderConfig { theme }) color_ =
     case color_ of
-        GenericWhite ->
-            theme.genericWhite
-
-        GenericBlack ->
-            theme.genericBlack
-
         TabShadow ->
             theme.tabShadow
 
@@ -226,8 +234,20 @@ toUI (RenderConfig { theme }) color_ =
         Color Success shade ->
             shadeFromHue theme.success shade
 
+        Background100 ->
+            theme.background.shade100
 
-shadeFromHue : HueStages -> Shade -> UI.Color
+        Background300 ->
+            theme.background.shade300
+
+        Background500 ->
+            theme.background.shade500
+
+        Background700 ->
+            theme.background.shade700
+
+
+shadeFromHue : { x | shade200 : UI.Color, shade400 : UI.Color, shade600 : UI.Color, shade800 : UI.Color } -> Shade -> UI.Color
 shadeFromHue stages shade =
     case shade of
         Shade200 ->

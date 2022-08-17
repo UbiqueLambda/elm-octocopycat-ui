@@ -1,7 +1,7 @@
 module Internals.Header exposing (Header, Model, Msg, header, height, init, update, view)
 
 import Internals.Effects as Effects exposing (Effects)
-import Internals.Palette as Palette exposing (background400)
+import Internals.Palette as Palette exposing (background600)
 import Internals.RenderConfig exposing (RenderConfig)
 import UI
 
@@ -49,7 +49,7 @@ view renderConfig width _ =
         |> UI.withPaddingXY 32 16
         |> UI.withSpacing 16
         |> UI.withBackground
-            (Palette.backgroundColor renderConfig background400 |> Just)
+            (Palette.backgroundColor renderConfig background600 |> Just)
 
 
 height : RenderConfig -> Header -> Int

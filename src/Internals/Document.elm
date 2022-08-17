@@ -16,7 +16,7 @@ import Internals.Effects as Effects exposing (Effects)
 import Internals.Footer as Footer exposing (Footer)
 import Internals.Header as Header exposing (Header)
 import Internals.Helpers exposing (Canvas)
-import Internals.Palette as Palette exposing (background800, genericWhite)
+import Internals.Palette as Palette exposing (background100, background800)
 import Internals.RenderConfig as RenderConfig exposing (RenderConfig)
 import UI
 
@@ -153,7 +153,7 @@ toElmDocument encoder renderConfig (Document toParentMsg { header, footer }) pag
                 ]
                 UI.sansSerif
             |> UI.withJustifyItems UI.center
-            |> Palette.withFontColor renderConfig genericWhite
+            |> Palette.withFontColor renderConfig background100
             |> UI.withBackground (Palette.backgroundColor renderConfig background800 |> Just)
             |> encoder
     }
