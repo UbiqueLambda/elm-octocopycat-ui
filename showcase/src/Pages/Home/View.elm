@@ -2,10 +2,11 @@ module Pages.Home.View exposing (view)
 
 import DesignSystem as DS exposing (background500, background700)
 import Pages.Home.Model exposing (Dialog(..), Model)
+import Pages.Home.Msg as Msg exposing (Msg)
 import UI
 
 
-view : DS.RenderConfig -> Model -> DS.Canvas -> DS.Page msg
+view : DS.RenderConfig -> Model -> DS.Canvas -> DS.Page Msg
 view renderConfig model canvas =
     UI.indexedRow
         [ UI.indexedColumn
@@ -116,6 +117,7 @@ button label renderConfig hue =
         [ UI.spanText label
         , DS.button "Go to Google"
             |> DS.buttonWithColors hue
+            |> DS.buttonWithOnClick (Msg.OnButton label)
             |> DS.buttonToUI renderConfig
         ]
         |> UI.withSpacing 16
@@ -124,7 +126,9 @@ button label renderConfig hue =
 dialogSetup renderConfig dialogModel =
     case dialogModel of
         Just (ButtonDemo _) ->
-            Nothing
+            DS.dialog Msg.CloseDialog
+                "Demo dialog"
+                |> Just
 
         Nothing ->
             Nothing

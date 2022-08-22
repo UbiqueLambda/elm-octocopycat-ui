@@ -6,6 +6,7 @@ module Internals.Document exposing
     , document
     , init
     , page
+    , pageMap
     , pageWithDialog
     , toElmDocument
     , update
@@ -78,6 +79,16 @@ page title view =
         , view = view
         , dialog = Nothing
         , standardSections = True
+        }
+
+
+pageMap : (a -> b) -> Page a -> Page b
+pageMap applier (Page page_) =
+    Page
+        { title = page_.title
+        , view = UI.map applier page_.view
+        , dialog = Maybe.map (Dialog.map applier) page_.dialog
+        , standardSections = page_.standardSections
         }
 
 
@@ -164,5 +175,5 @@ dialogOverlay renderConfig deviceWidth deviceHeight =
     UI.empty
         |> UI.withWidth deviceWidth
         |> UI.withHeight deviceHeight
-        |> UI.withBackground (Palette.backgroundColor renderConfig background800 |> Just)
+        |> UI.withBackground (UI.intRGBA 0xCC |> UI.backgroundColor |> Just)
         |> Tuple.pair "overlay"

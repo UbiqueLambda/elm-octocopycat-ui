@@ -21,6 +21,7 @@ module DesignSystem exposing
     , button
     , buttonToUI
     , buttonWithColors
+    , buttonWithOnClick
     , colorTabShadow
     , danger
     , danger200
@@ -33,6 +34,7 @@ module DesignSystem exposing
     , documentToElmDocument
     , documentUpdate
     , page
+    , pageMap
     , pageWithDialog
     , primary
     , primary200
@@ -115,6 +117,10 @@ buttonWithColors =
     IButton.withColors
 
 
+buttonWithOnClick =
+    IButton.withOnClick
+
+
 dialog =
     IDialog.dialog
 
@@ -125,6 +131,10 @@ document =
 
 page =
     IDocument.page
+
+
+pageMap =
+    IDocument.pageMap
 
 
 pageWithDialog =

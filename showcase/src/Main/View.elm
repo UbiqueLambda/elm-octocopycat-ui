@@ -17,3 +17,4 @@ pageCase renderConfig model =
     case model.page of
         Home homeModel ->
             Home.view renderConfig homeModel
+                >> DS.pageMap (Msg.ForHome >> Msg.ForPage)

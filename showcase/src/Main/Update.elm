@@ -1,11 +1,13 @@
 module Main.Update exposing (update)
 
 import DesignSystem as DS
-import Main.Model exposing (Model)
-import Main.Msg exposing (Msg(..))
+import Effects exposing (Effects)
+import Main.Model exposing (Model, Pages(..))
+import Main.Msg exposing (Msg(..), PageMsg(..))
+import Pages.Home.Update as Home
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
+update : Msg -> Model -> ( Model, Effects Msg )
 update msg model =
     case msg of
         ForDocument documentMsg ->
@@ -13,7 +15,7 @@ update msg model =
                 ( document, effects ) =
                     DS.documentUpdate documentMsg model.document
             in
-            ( { model | document = document }, Cmd.none )
+            ( { model | document = document }, Effects.none )
 
         OnResize newWidth newHeight ->
             ( { model
@@ -22,8 +24,24 @@ update msg model =
                         { deviceWidth = newWidth, deviceHeight = newHeight }
                         model.renderConfig
               }
-            , Cmd.none
+            , Effects.none
             )
 
-        ToDo ->
-            ( model, Cmd.none )
+        ForPage pageMsg ->
+            let
+                ( newPageModel, pageEffects ) =
+                    forPage pageMsg model.page
+            in
+            ( { model | page = newPageModel }
+            , pageEffects
+            )
+
+
+forPage msg model =
+    case msg of
+        ForHome pageMsg ->
+            case model of
+                Home pageModel ->
+                    Home.update pageMsg pageModel
+                        |> Tuple.mapBoth Home
+                            (Effects.map (ForHome >> ForPage))

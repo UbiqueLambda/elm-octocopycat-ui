@@ -1,9 +1,10 @@
-module Internals.Button exposing (Button(..), button, toUI, withColors)
+module Internals.Button exposing (Button(..), button, toUI, withColors, withOnClick)
 
 import Internals.Badge exposing (Badge)
 import Internals.Icons exposing (Icon)
 import Internals.Palette as Palette exposing (Hue)
 import Internals.RenderConfig exposing (RenderConfig(..))
+import Internals.SSOT as SSOT
 import UI
 
 
@@ -14,7 +15,7 @@ type Button msg
         , icon : Maybe Icon
         , badge : Maybe Badge
         , dropdown : Maybe msg
-        , onClick : Maybe msg -- Nothing => Disabled
+        , onClickMsg : Maybe msg -- Nothing => Disabled
         }
 
 
@@ -26,7 +27,7 @@ button label =
         , icon = Nothing
         , badge = Nothing
         , dropdown = Nothing
-        , onClick = Nothing
+        , onClickMsg = Nothing
         }
 
 
@@ -35,18 +36,32 @@ withColors newHue (Button button_) =
     Button { button_ | hue = newHue }
 
 
+withOnClick : msg -> Button msg -> Button msg
+withOnClick onClickMsg (Button button_) =
+    Button { button_ | onClickMsg = Just onClickMsg }
+
+
 toUI : RenderConfig -> Button msg -> UI.Graphics msg
 toUI renderConfig (Button button_) =
     let
         ( backgroundColor, textColor, borderColor ) =
             colors renderConfig button_.hue
+
+        uiWithOnClick =
+            case button_.onClickMsg of
+                Just onClickMsg_ ->
+                    UI.withOnClick onClickMsg_
+
+                Nothing ->
+                    identity
     in
     UI.spanText button_.label
         |> UI.withFontSize 14
         |> UI.withPaddingXY 16 7
         |> UI.withFontColor textColor
-        |> UI.withBorder (UI.border1uBlack |> UI.borderWithColor borderColor |> UI.borderWithRounding 6 |> Just)
+        |> UI.withBorder (UI.border1uBlack |> UI.borderWithColor borderColor |> SSOT.withBoxRounding |> Just)
         |> UI.withBackground (UI.backgroundColor backgroundColor |> Just)
+        |> uiWithOnClick
 
 
 {-| (background, text, border)
