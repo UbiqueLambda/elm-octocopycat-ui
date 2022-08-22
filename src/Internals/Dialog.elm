@@ -1,7 +1,7 @@
 module Internals.Dialog exposing (Dialog(..), dialog, map, view)
 
+import Internals.Config exposing (Config)
 import Internals.Palette as Palette
-import Internals.RenderConfig exposing (RenderConfig)
 import Internals.SSOT as SSOT
 import UI
 
@@ -24,8 +24,8 @@ map applier (Dialog dialog_) =
         }
 
 
-view : RenderConfig -> Int -> Int -> Dialog msg -> ( String, UI.Graphics msg )
-view renderConfig screenWidth screenHeight (Dialog { contents, title, closeMsg }) =
+view : Config -> Int -> Int -> Dialog msg -> ( String, UI.Graphics msg )
+view ds screenWidth screenHeight (Dialog { contents, title, closeMsg }) =
     let
         width_ =
             if screenWidth < 640 then
@@ -42,13 +42,13 @@ view renderConfig screenWidth screenHeight (Dialog { contents, title, closeMsg }
                 |> UI.withOnClick closeMsg
             ]
             |> UI.withJustifyItems UI.center
-            |> UI.withBackground (Just <| Palette.backgroundColor renderConfig Palette.background600)
+            |> UI.withBackground (Just <| Palette.backgroundColor ds Palette.background600)
             |> UI.withPadding 16
             |> UI.withWidth width_
             |> UI.withHeight 21
         , contents
         ]
-        |> UI.withBackground (Just <| Palette.backgroundColor renderConfig Palette.background700)
+        |> UI.withBackground (Just <| Palette.backgroundColor ds Palette.background700)
         |> UI.withAlignSelf UI.center
-        |> UI.withBorder (UI.border1uBlack |> Palette.borderWithColor renderConfig Palette.background300 |> SSOT.withBoxRounding |> Just)
+        |> UI.withBorder (UI.border1uBlack |> Palette.borderWithColor ds Palette.background300 |> SSOT.withBoxRounding |> Just)
     )

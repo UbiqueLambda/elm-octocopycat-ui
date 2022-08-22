@@ -1,8 +1,10 @@
 module Main.Model exposing (Flags, Model, Pages(..), init)
 
 import DesignSystem as DS
-import Main.Msg exposing (Msg)
-import Pages.Home.Model as Home
+import Effects exposing (Effects)
+import Main.Msg as Msg exposing (Msg)
+import Pages.Basics.Model as Basics
+import Pages.Core.Model as Core
 
 
 type alias Flags =
@@ -13,20 +15,25 @@ type alias Flags =
 
 type alias Model =
     { document : DS.DocumentModel
-    , renderConfig : DS.RenderConfig
+    , ds : DS.Config
     , page : Pages
     }
 
 
 type Pages
-    = Home Home.Model
+    = CorePage Core.Model
+    | BasicsPage Basics.Model
 
 
-init : Flags -> ( Model, Cmd Msg )
+init : Flags -> ( Model, Effects Msg )
 init { innerWidth, innerHeight } =
+    let
+        ( pageModel, pageEffects ) =
+            Core.init
+    in
     ( { document = DS.documentInit
-      , renderConfig = DS.renderConfigInit { deviceWidth = innerWidth, deviceHeight = innerHeight }
-      , page = Home Home.init
+      , ds = DS.configInit { deviceWidth = innerWidth, deviceHeight = innerHeight }
+      , page = CorePage pageModel
       }
-    , Cmd.none
+    , Effects.map (Msg.ForCore >> Msg.ForPage) pageEffects
     )

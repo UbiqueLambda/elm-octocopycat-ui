@@ -4,6 +4,7 @@ module Internals.Document exposing
     , Msg
     , Page
     , document
+    , headerWithItems
     , init
     , page
     , pageMap
@@ -12,33 +13,32 @@ module Internals.Document exposing
     , update
     )
 
+import Internals.Config as Config exposing (Config)
 import Internals.Dialog as Dialog exposing (Dialog)
 import Internals.Effects as Effects exposing (Effects)
 import Internals.Footer as Footer exposing (Footer)
 import Internals.Header as Header exposing (Header)
 import Internals.Helpers exposing (Canvas)
 import Internals.Palette as Palette exposing (background100, background800)
-import Internals.RenderConfig as RenderConfig exposing (RenderConfig)
+import Internals.SSOT as SSOT
 import UI
 
 
 type Document msg
     = Document
         (Msg -> msg)
-        { header : Header
-        , footer : Footer
+        { header : Header msg
+        , footer : Footer msg
         }
 
 
 type Msg
     = ForHeader Header.Msg
-    | ForFooter Footer.Msg
 
 
 type Model
     = Model
         { header : Header.Model
-        , footer : Footer.Model
         }
 
 
@@ -55,15 +55,19 @@ document : (Msg -> msg) -> Model -> Document msg
 document toParentMsg (Model model) =
     Document toParentMsg
         { header = Header.header model.header
-        , footer = Footer.footer model.footer
+        , footer = Footer.footer "FOSS 2022 UbiqueLambda" []
         }
+
+
+headerWithItems : List ( String, msg ) -> Document msg -> Document msg
+headerWithItems items (Document toMsg document_) =
+    Document toMsg { document_ | header = Header.withItems items document_.header }
 
 
 init : Model
 init =
     Model
         { header = Header.init
-        , footer = Footer.init
         }
 
 
@@ -99,25 +103,28 @@ pageWithDialog dialog (Page page_) =
 
 toElmDocument :
     (UI.Graphics msg -> view)
-    -> RenderConfig
+    -> Config
     -> Document msg
     -> (Canvas -> Page msg)
     ->
         { body : view
         , title : String
         }
-toElmDocument encoder renderConfig (Document toParentMsg { header, footer }) pageFn =
+toElmDocument encoder ds (Document toParentMsg { header, footer }) pageFn =
     let
         deviceWidth =
-            RenderConfig.getDeviceWidth renderConfig
+            Config.getDeviceWidth ds
 
         deviceHeight =
-            RenderConfig.getDeviceHeight renderConfig
+            Config.getDeviceHeight ds
 
         bodyHeight =
             deviceHeight
-                - Header.height renderConfig header
-                - Footer.height renderConfig footer
+                - Header.height ds header
+                - Footer.height ds footer
+
+        rootFontSize =
+            Config.rem1 ds
 
         bodyCanvas =
             { width = deviceWidth, height = bodyHeight, clipX = True, clipY = False }
@@ -127,12 +134,13 @@ toElmDocument encoder renderConfig (Document toParentMsg { header, footer }) pag
 
         contentView =
             UI.column
-                [ Header.view renderConfig deviceWidth header
-                    |> UI.map (ForHeader >> toParentMsg)
+                [ Header.view ds
+                    (ForHeader >> toParentMsg)
+                    deviceWidth
+                    header
                     |> Tuple.pair "header"
                 , ( "body", page_.view )
-                , Footer.view renderConfig deviceWidth footer
-                    |> UI.map (ForFooter >> toParentMsg)
+                , Footer.view ds deviceWidth footer
                     |> Tuple.pair "footer"
                 ]
                 |> UI.withWidth deviceWidth
@@ -144,8 +152,8 @@ toElmDocument encoder renderConfig (Document toParentMsg { header, footer }) pag
             case page_.dialog of
                 Just dialog_ ->
                     [ contentView
-                    , dialogOverlay renderConfig deviceWidth deviceHeight
-                    , Dialog.view renderConfig deviceWidth deviceHeight dialog_
+                    , dialogOverlay ds deviceWidth deviceHeight
+                    , Dialog.view ds deviceWidth deviceHeight dialog_
                     ]
 
                 Nothing ->
@@ -155,23 +163,17 @@ toElmDocument encoder renderConfig (Document toParentMsg { header, footer }) pag
     , body =
         contentWithDialog
             |> UI.stack
-            |> UI.withFontFamilies
-                [ "-apple-system"
-                , "BlinkMacSystemFont"
-                , "Segoe UI"
-                , "Helvetica"
-                , "Arial"
-                ]
-                UI.sansSerif
+            |> SSOT.withRootFontFamilies
+            |> UI.withFontSize rootFontSize
             |> UI.withJustifyItems UI.center
-            |> Palette.withFontColor renderConfig background100
-            |> UI.withBackground (Palette.backgroundColor renderConfig background800 |> Just)
+            |> Palette.withFontColor ds background100
+            |> UI.withBackground (Palette.backgroundColor ds background800 |> Just)
             |> encoder
     }
 
 
-dialogOverlay : RenderConfig -> Int -> Int -> ( String, UI.Graphics msg )
-dialogOverlay renderConfig deviceWidth deviceHeight =
+dialogOverlay : Config -> Int -> Int -> ( String, UI.Graphics msg )
+dialogOverlay ds deviceWidth deviceHeight =
     UI.empty
         |> UI.withWidth deviceWidth
         |> UI.withHeight deviceHeight

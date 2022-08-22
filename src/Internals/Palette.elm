@@ -39,7 +39,7 @@ module Internals.Palette exposing
     , withFontColor
     )
 
-import Internals.RenderConfig exposing (RenderConfig(..))
+import Internals.Config exposing (Config(..))
 import UI
 
 
@@ -216,8 +216,8 @@ success800 =
     Color Success Shade800
 
 
-toUI : RenderConfig -> Color -> UI.Color
-toUI (RenderConfig { theme }) color_ =
+toUI : Config -> Color -> UI.Color
+toUI (Config { theme }) color_ =
     case color_ of
         TabShadow ->
             theme.tabShadow
@@ -263,21 +263,21 @@ shadeFromHue stages shade =
             stages.shade800
 
 
-backgroundColor : RenderConfig -> Color -> UI.Background
-backgroundColor renderConfig color_ =
-    UI.backgroundColor (toUI renderConfig color_)
+backgroundColor : Config -> Color -> UI.Background
+backgroundColor ds color_ =
+    UI.backgroundColor (toUI ds color_)
 
 
-withFontColor : RenderConfig -> Color -> UI.Graphics msg -> UI.Graphics msg
-withFontColor renderConfig color_ =
-    UI.withFontColor (toUI renderConfig color_)
+withFontColor : Config -> Color -> UI.Graphics msg -> UI.Graphics msg
+withFontColor ds color_ =
+    UI.withFontColor (toUI ds color_)
 
 
-shadowWithColor : RenderConfig -> Color -> UI.Shadow -> UI.Shadow
-shadowWithColor renderConfig color_ =
-    UI.shadowWithColor (toUI renderConfig color_)
+shadowWithColor : Config -> Color -> UI.Shadow -> UI.Shadow
+shadowWithColor ds color_ =
+    UI.shadowWithColor (toUI ds color_)
 
 
-borderWithColor : RenderConfig -> Color -> UI.Border -> UI.Border
-borderWithColor renderConfig color_ =
-    UI.borderWithColor (toUI renderConfig color_)
+borderWithColor : Config -> Color -> UI.Border -> UI.Border
+borderWithColor ds color_ =
+    UI.borderWithColor (toUI ds color_)

@@ -1,9 +1,9 @@
 module Internals.Button exposing (Button(..), button, toUI, withColors, withOnClick)
 
 import Internals.Badge exposing (Badge)
+import Internals.Config as Config exposing (Config(..))
 import Internals.Icons exposing (Icon)
 import Internals.Palette as Palette exposing (Hue)
-import Internals.RenderConfig exposing (RenderConfig(..))
 import Internals.SSOT as SSOT
 import UI
 
@@ -41,11 +41,11 @@ withOnClick onClickMsg (Button button_) =
     Button { button_ | onClickMsg = Just onClickMsg }
 
 
-toUI : RenderConfig -> Button msg -> UI.Graphics msg
-toUI renderConfig (Button button_) =
+toUI : Config -> Button msg -> UI.Graphics msg
+toUI ds (Button button_) =
     let
         ( backgroundColor, textColor, borderColor ) =
-            colors renderConfig button_.hue
+            colors ds button_.hue
 
         uiWithOnClick =
             case button_.onClickMsg of
@@ -56,9 +56,11 @@ toUI renderConfig (Button button_) =
                     identity
     in
     UI.spanText button_.label
-        |> UI.withFontSize 14
-        |> UI.withPaddingXY 16 7
+        |> SSOT.withRootFontFamilies
+        |> UI.withFontSize (Config.rem0d875 ds)
+        |> UI.withFontWeight 400
         |> UI.withFontColor textColor
+        |> UI.withPaddingXY 16 7
         |> UI.withBorder (UI.border1uBlack |> UI.borderWithColor borderColor |> SSOT.withBoxRounding |> Just)
         |> UI.withBackground (UI.backgroundColor backgroundColor |> Just)
         |> uiWithOnClick
@@ -66,8 +68,8 @@ toUI renderConfig (Button button_) =
 
 {-| (background, text, border)
 -}
-colors : RenderConfig -> Palette.Hue -> ( UI.Color, UI.Color, UI.Color )
-colors (RenderConfig { theme }) hue =
+colors : Config -> Palette.Hue -> ( UI.Color, UI.Color, UI.Color )
+colors (Config { theme }) hue =
     case hue of
         Palette.Background ->
             ( theme.background.shade500
@@ -94,8 +96,8 @@ colors (RenderConfig { theme }) hue =
             )
 
 
-hoverColors : RenderConfig -> Palette.Hue -> ( UI.Color, UI.Color )
-hoverColors (RenderConfig { theme }) hue =
+hoverColors : Config -> Palette.Hue -> ( UI.Color, UI.Color )
+hoverColors (Config { theme }) hue =
     case hue of
         Palette.Background ->
             ( theme.background.shade200, theme.background.shade100 )

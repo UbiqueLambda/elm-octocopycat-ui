@@ -16,7 +16,10 @@ import UI.Renderer.Html as UIHtml
 main : Program Flags Model Msg
 main =
     Browser.document
-        { init = Model.init
+        { init =
+            \flags ->
+                Model.init flags
+                    |> Tuple.mapSecond performEffects
         , subscriptions =
             \model ->
                 Sub.batch
@@ -24,14 +27,16 @@ main =
                     , Subscriptions.subscriptions model
                     ]
         , update =
-            \msg model -> Update.update msg model |> Tuple.mapSecond performEffects
+            \msg model ->
+                Update.update msg model
+                    |> Tuple.mapSecond performEffects
         , view =
             \model ->
                 DS.documentToElmDocument
                     (UIHtml.encode htmlEncoder)
-                    model.renderConfig
+                    model.ds
                     (View.document model)
-                    (View.pageCase model.renderConfig model)
+                    (View.pageCase model.ds model)
         }
 
 

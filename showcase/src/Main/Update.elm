@@ -4,7 +4,11 @@ import DesignSystem as DS
 import Effects exposing (Effects)
 import Main.Model exposing (Model, Pages(..))
 import Main.Msg exposing (Msg(..), PageMsg(..))
-import Pages.Home.Update as Home
+import Pages.Basics.Model as Basics
+import Pages.Basics.Update as Basics
+import Pages.Core.Model as Core
+import Pages.Core.Update as Core
+import Pages.Route exposing (Route(..))
 
 
 update : Msg -> Model -> ( Model, Effects Msg )
@@ -17,16 +21,6 @@ update msg model =
             in
             ( { model | document = document }, Effects.none )
 
-        OnResize newWidth newHeight ->
-            ( { model
-                | renderConfig =
-                    DS.renderConfigOnResize
-                        { deviceWidth = newWidth, deviceHeight = newHeight }
-                        model.renderConfig
-              }
-            , Effects.none
-            )
-
         ForPage pageMsg ->
             let
                 ( newPageModel, pageEffects ) =
@@ -36,12 +30,55 @@ update msg model =
             , pageEffects
             )
 
+        GoToInternal route ->
+            pageChange route model
 
+        OnResize newWidth newHeight ->
+            ( { model
+                | ds =
+                    DS.configOnResize
+                        { deviceWidth = newWidth, deviceHeight = newHeight }
+                        model.ds
+              }
+            , Effects.none
+            )
+
+
+forPage : PageMsg -> Pages -> ( Pages, Effects Msg )
 forPage msg model =
     case msg of
-        ForHome pageMsg ->
+        ForCore pageMsg ->
             case model of
-                Home pageModel ->
-                    Home.update pageMsg pageModel
-                        |> Tuple.mapBoth Home
-                            (Effects.map (ForHome >> ForPage))
+                CorePage pageModel ->
+                    Core.update pageMsg pageModel
+                        |> Tuple.mapBoth CorePage
+                            (Effects.map (ForCore >> ForPage))
+
+                _ ->
+                    ( model, Effects.none )
+
+        ForBasics pageMsg ->
+            case model of
+                BasicsPage pageModel ->
+                    Basics.update pageMsg pageModel
+                        |> Tuple.mapBoth BasicsPage
+                            (Effects.map (ForBasics >> ForPage))
+
+                _ ->
+                    ( model, Effects.none )
+
+
+pageChange : Route -> Model -> ( Model, Effects Msg )
+pageChange route model =
+    let
+        pageApply modelMap msgMap ( pageModel, pageEffects ) =
+            ( { model | page = modelMap pageModel }
+            , Effects.map (msgMap >> ForPage) pageEffects
+            )
+    in
+    case route of
+        GoToCore ->
+            pageApply CorePage ForCore Core.init
+
+        GoToBasics ->
+            pageApply BasicsPage ForBasics Basics.init

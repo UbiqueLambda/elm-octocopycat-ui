@@ -1,6 +1,6 @@
-module Internals.RenderConfig exposing
-    ( FullHueStages
-    , RenderConfig(..)
+module Internals.Config exposing
+    ( Config(..)
+    , FullHueStages
     , ShortHueStages
     , Terms
     , Theme
@@ -9,52 +9,114 @@ module Internals.RenderConfig exposing
     , getTerms
     , init
     , onResize
+    , rem
+    , rem0d85
+    , rem0d875
+    , rem1
+    , rem1d25
+    , rem1d5
+    , rem2
     )
 
 import UI
 
 
-type RenderConfig
-    = RenderConfig
+type Config
+    = Config
         { theme : Theme
         , deviceWidth : Int
         , deviceHeight : Int
         , terms : Terms
+        , fontSizes : FontSizes
         }
 
 
-init : { deviceWidth : Int, deviceHeight : Int } -> RenderConfig
+init : { deviceWidth : Int, deviceHeight : Int } -> Config
 init { deviceWidth, deviceHeight } =
-    RenderConfig
+    Config
         { theme = defaultTheme
         , terms = defaultTerms
         , deviceWidth = deviceWidth
         , deviceHeight = deviceHeight
+        , fontSizes = calcFontSizes 16
         }
 
 
-onResize : { deviceWidth : Int, deviceHeight : Int } -> RenderConfig -> RenderConfig
-onResize { deviceWidth, deviceHeight } (RenderConfig config) =
-    RenderConfig
+onResize : { deviceWidth : Int, deviceHeight : Int } -> Config -> Config
+onResize { deviceWidth, deviceHeight } (Config config) =
+    Config
         { config
             | deviceWidth = deviceWidth
             , deviceHeight = deviceHeight
         }
 
 
-getDeviceWidth : RenderConfig -> Int
-getDeviceWidth (RenderConfig { deviceWidth }) =
+getDeviceWidth : Config -> Int
+getDeviceWidth (Config { deviceWidth }) =
     deviceWidth
 
 
-getDeviceHeight : RenderConfig -> Int
-getDeviceHeight (RenderConfig { deviceHeight }) =
+getDeviceHeight : Config -> Int
+getDeviceHeight (Config { deviceHeight }) =
     deviceHeight
 
 
-getTerms : RenderConfig -> Terms
-getTerms (RenderConfig { terms }) =
+getTerms : Config -> Terms
+getTerms (Config { terms }) =
     terms
+
+
+rem0d85 : Config -> Int
+rem0d85 (Config { fontSizes }) =
+    fontSizes.r0d85
+
+
+rem0d875 : Config -> Int
+rem0d875 (Config { fontSizes }) =
+    fontSizes.r0d875
+
+
+rem1 : Config -> Int
+rem1 (Config { fontSizes }) =
+    fontSizes.r1
+
+
+rem1d25 : Config -> Int
+rem1d25 (Config { fontSizes }) =
+    fontSizes.r1d25
+
+
+rem1d5 : Config -> Int
+rem1d5 (Config { fontSizes }) =
+    fontSizes.r1d5
+
+
+rem2 : Config -> Int
+rem2 (Config { fontSizes }) =
+    fontSizes.r2
+
+
+rem : Config -> Float -> Int
+rem (Config { fontSizes }) rem_ =
+    floor (toFloat fontSizes.r1 * rem_)
+
+
+calcFontSizes : Int -> FontSizes
+calcFontSizes rootFontSize =
+    let
+        rootFontSizeFloat =
+            toFloat rootFontSize
+
+        calcFloat rem_ =
+            floor (rootFontSizeFloat * rem_)
+    in
+    { r0d85 = calcFloat 0.85
+    , r0d875 = calcFloat 0.875
+    , r1 = rootFontSize
+    , r1d25 = calcFloat 1.25
+    , r1d5 = calcFloat 1.5
+    , r2 = rootFontSize * 2
+    }
 
 
 {-| To be replaced by auto-generated i18n
@@ -73,6 +135,16 @@ type alias Theme =
     , danger : ShortHueStages
     , success : ShortHueStages
     , tabShadow : UI.Color
+    }
+
+
+type alias FontSizes =
+    { r0d85 : Int
+    , r0d875 : Int
+    , r1 : Int
+    , r1d25 : Int
+    , r1d5 : Int
+    , r2 : Int
     }
 
 

@@ -1,12 +1,12 @@
 module DesignSystem exposing
     ( Canvas
+    , Config
     , Dialog
     , Document
     , DocumentModel
     , DocumentMsg
     , Hue
     , Page
-    , RenderConfig
     , background
     , background100
     , background200
@@ -23,6 +23,8 @@ module DesignSystem exposing
     , buttonWithColors
     , buttonWithOnClick
     , colorTabShadow
+    , configInit
+    , configOnResize
     , danger
     , danger200
     , danger400
@@ -33,6 +35,7 @@ module DesignSystem exposing
     , documentInit
     , documentToElmDocument
     , documentUpdate
+    , headerWithItems
     , page
     , pageMap
     , pageWithDialog
@@ -41,20 +44,34 @@ module DesignSystem exposing
     , primary400
     , primary600
     , primary800
-    , renderConfigInit
-    , renderConfigOnResize
+    , rem
+    , rem0d85
+    , rem0d875
+    , rem1
+    , rem1d25
+    , rem1d5
+    , rem2
     , success
     , success200
     , success400
     , success600
     , success800
+    , textBody
+    , textH1
+    , textH2
+    , textH3
+    , textH4
+    , textH5
+    , textH6
+    , textHeaderTitle
     )
 
 import Internals.Button as IButton
+import Internals.Config as IConfig
 import Internals.Dialog as IDialog
 import Internals.Document as IDocument
 import Internals.Palette as IPalette
-import Internals.RenderConfig as IRenderConfig
+import Internals.Text as IText
 
 
 type alias Canvas =
@@ -65,8 +82,8 @@ type alias Canvas =
     }
 
 
-type alias RenderConfig =
-    IRenderConfig.RenderConfig
+type alias Config =
+    IConfig.Config
 
 
 type alias Button msg =
@@ -97,12 +114,12 @@ type alias Page msg =
     IDocument.Page msg
 
 
-renderConfigInit =
-    IRenderConfig.init
+configInit =
+    IConfig.init
 
 
-renderConfigOnResize =
-    IRenderConfig.onResize
+configOnResize =
+    IConfig.onResize
 
 
 button =
@@ -147,6 +164,10 @@ documentInit =
 
 documentUpdate =
     IDocument.update
+
+
+headerWithItems =
+    IDocument.headerWithItems
 
 
 documentToElmDocument =
@@ -259,3 +280,63 @@ success600 =
 
 success800 =
     IPalette.success800
+
+
+textBody =
+    IText.body
+
+
+textH1 =
+    IText.h1
+
+
+textH2 =
+    IText.h2
+
+
+textH3 =
+    IText.h3
+
+
+textH4 =
+    IText.h4
+
+
+textH5 =
+    IText.h5
+
+
+textH6 =
+    IText.h6
+
+
+textHeaderTitle =
+    IText.headerTitle
+
+
+rem =
+    IConfig.rem
+
+
+rem0d85 =
+    IConfig.rem0d85
+
+
+rem0d875 =
+    IConfig.rem0d875
+
+
+rem1 =
+    IConfig.rem1
+
+
+rem1d25 =
+    IConfig.rem1d25
+
+
+rem1d5 =
+    IConfig.rem1d5
+
+
+rem2 =
+    IConfig.rem2

@@ -1,4 +1,4 @@
-module Pages.Home.Msg exposing (..)
+module Pages.Basics.Msg exposing (..)
 
 
 type Msg

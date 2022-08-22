@@ -1,8 +1,8 @@
-module Pages.Home.Update exposing (..)
+module Pages.Basics.Update exposing (..)
 
 import Effects exposing (Effects)
-import Pages.Home.Model as Model exposing (Model)
-import Pages.Home.Msg exposing (Msg(..))
+import Pages.Basics.Model as Model exposing (Model)
+import Pages.Basics.Msg exposing (Msg(..))
 
 
 update : Msg -> Model -> ( Model, Effects Msg )
