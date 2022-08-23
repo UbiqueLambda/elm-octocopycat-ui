@@ -12,6 +12,7 @@ view ds model canvas =
         [ UI.indexedColumn
             [ DS.textH4 ds "Colors"
             , DS.textH4 ds "Typography"
+            , DS.textH4 ds "Icons"
             ]
             |> UI.withWidth 318
             |> UI.withHeight (canvas.height - 32)
@@ -97,8 +98,8 @@ typoView ds =
         , DS.textH2 ds "Example (H2)"
         , DS.textH3 ds "Example (H3)"
         , DS.textH4 ds "Example (H4)"
-        , DS.textH5 ds "Example (H1)"
-        , DS.textH6 ds "Example (H1)"
+        , DS.textH5 ds "Example (H5)"
+        , DS.textH6 ds "Example (H6)"
         , DS.textBody ds "Example (Body)"
         ]
         |> UI.withSpacing 16

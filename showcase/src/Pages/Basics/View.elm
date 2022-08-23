@@ -11,8 +11,10 @@ view ds model canvas =
     UI.indexedRow
         [ UI.indexedColumn
             [ DS.textH4 ds "Buttons"
+            , DS.textH4 ds "Badges"
             , DS.textH4 ds "Tabs"
             , DS.textH4 ds "Radio Buttons"
+            , DS.textH4 ds "Alerts"
             ]
             |> UI.withWidth 318
             |> UI.withHeight (canvas.height - 32)
@@ -67,9 +69,15 @@ button label ds hue =
 
 dialogSetup ds dialogModel =
     case dialogModel of
-        Just (ButtonDemo _) ->
-            DS.dialog Msg.CloseDialog
-                "Demo dialog"
+        Just (ButtonDemo buttonName) ->
+            UI.indexedColumn
+                [ DS.textBody ds "This is an example of a dialog box."
+                , DS.textBody ds <| "You've clicked the \"" ++ buttonName ++ "\" button."
+                ]
+                |> UI.withPadding 16
+                |> UI.withSpacing 16
+                |> DS.dialog Msg.CloseDialog
+                    "Dialog demo"
                 |> Just
 
         Nothing ->
