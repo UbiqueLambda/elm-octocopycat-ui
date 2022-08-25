@@ -1,8 +1,6 @@
 module Internals.Button exposing (Button(..), button, toUI, withColors, withOnClick)
 
-import Internals.Badge exposing (Badge)
 import Internals.Config as Config exposing (Config(..))
-import Internals.Icons exposing (Icon)
 import Internals.Palette as Palette exposing (Hue)
 import Internals.SSOT as SSOT
 import UI
@@ -12,8 +10,9 @@ type Button msg
     = Button
         { label : String
         , hue : Palette.Hue
-        , icon : Maybe Icon
-        , badge : Maybe Badge
+
+        --, icon : Maybe Icon
+        --, badge : Maybe Badge
         , dropdown : Maybe msg
         , onClickMsg : Maybe msg -- Nothing => Disabled
         }
@@ -24,8 +23,6 @@ button label =
     Button
         { label = label
         , hue = Palette.Background
-        , icon = Nothing
-        , badge = Nothing
         , dropdown = Nothing
         , onClickMsg = Nothing
         }

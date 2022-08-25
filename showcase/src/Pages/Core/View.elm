@@ -29,6 +29,7 @@ view ds model canvas =
         , UI.indexedColumn
             [ colorsView ds
             , typoView ds
+            , iconsView ds
             ]
             |> UI.withWidth (canvas.width - 382)
             |> UI.withHeight (canvas.height - 32)
@@ -40,6 +41,7 @@ view ds model canvas =
         |> DS.page "Showcase: Core elements"
 
 
+square : DS.Config -> DS.Color -> UI.Graphics msg
 square ds color =
     UI.empty
         |> UI.withWidth 62
@@ -48,6 +50,7 @@ square ds color =
         |> UI.withBorder (UI.border1uBlack |> DS.borderWithColor ds DS.colorTabShadow |> Just)
 
 
+colorsView : DS.Config -> UI.Graphics msg
 colorsView ds =
     UI.indexedColumn
         [ DS.textHeaderTitle ds "Colors"
@@ -91,6 +94,7 @@ colorsView ds =
         |> UI.withSpacing 16
 
 
+typoView : DS.Config -> UI.Graphics msg
 typoView ds =
     UI.indexedColumn
         [ DS.textHeaderTitle ds "Typography (HeaderTitle)"
@@ -101,5 +105,14 @@ typoView ds =
         , DS.textH5 ds "Example (H5)"
         , DS.textH6 ds "Example (H6)"
         , DS.textBody ds "Example (Body)"
+        ]
+        |> UI.withSpacing 16
+
+
+iconsView : DS.Config -> UI.Graphics msg
+iconsView ds =
+    UI.indexedColumn
+        [ DS.textHeaderTitle ds "Icons"
+        , DS.textBody ds "(Not ready yet.)"
         ]
         |> UI.withSpacing 16

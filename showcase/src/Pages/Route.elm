@@ -2,5 +2,6 @@ module Pages.Route exposing (Route(..))
 
 
 type Route
-    = GoToCore
-    | GoToBasics
+    = GoToBasics
+    | GoToCore
+    | GoToComplex

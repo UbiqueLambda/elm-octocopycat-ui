@@ -1,70 +1,31 @@
 module DesignSystem exposing
-    ( Canvas
-    , Config
-    , Dialog
-    , Document
-    , DocumentModel
-    , DocumentMsg
-    , Hue
-    , Page
-    , background
-    , background100
-    , background200
-    , background300
-    , background400
-    , background500
-    , background600
-    , background700
-    , background800
-    , backgroundColor
-    , borderWithColor
-    , button
-    , buttonToUI
-    , buttonWithColors
-    , buttonWithOnClick
-    , colorTabShadow
-    , configInit
-    , configOnResize
-    , danger
-    , danger200
-    , danger400
-    , danger600
-    , danger800
-    , dialog
-    , document
-    , documentInit
-    , documentToElmDocument
-    , documentUpdate
-    , headerWithItems
-    , page
-    , pageMap
-    , pageWithDialog
-    , primary
-    , primary200
-    , primary400
-    , primary600
-    , primary800
-    , rem
-    , rem0d85
-    , rem0d875
-    , rem1
-    , rem1d25
-    , rem1d5
-    , rem2
-    , success
-    , success200
-    , success400
-    , success600
-    , success800
-    , textBody
-    , textH1
-    , textH2
-    , textH3
-    , textH4
-    , textH5
-    , textH6
-    , textHeaderTitle
+    ( Hue, Shade, Color
+    , Config, configInit, configOnResize
+    , configGetDeviceHeight, configGetDeviceWidth
+    , rem0d85, rem0d875, rem1, rem1d25, rem1d5, rem2, rem
+    , Button, button, buttonWithColors, buttonWithOnClick, buttonToUI
+    , Dialog, dialog, dialogMap
+    , Canvas, Page, Document, DocumentMsg, DocumentModel
+    , background, background100, background200, background300, background400, background500, background600, background700, background800, backgroundColor, borderWithColor, colorTabShadow, danger, danger200, danger400, danger600, danger800, document, documentInit, documentToElmDocument, documentUpdate, headerWithItems, page, pageMap, pageWithDialog, primary, primary200, primary400, primary600, primary800, success, success200, success400, success600, success800, textBody, textH1, textH2, textH3, textH4, textH5, textH6, textHeaderTitle
     )
+
+{-|
+
+@docs Hue, Shade, Color
+
+@docs Config, configInit, configOnResize
+
+@docs configGetDeviceHeight, configGetDeviceWidth
+
+@docs rem0d85, rem0d875, rem1, rem1d25, rem1d5, rem2, rem
+
+@docs Button, button, buttonWithColors, buttonWithOnClick, buttonToUI
+
+@docs Dialog, dialog, dialogMap
+
+@docs Canvas, Page, Document, DocumentMsg, DocumentModel
+
+-}
 
 import Internals.Button as IButton
 import Internals.Config as IConfig
@@ -72,6 +33,7 @@ import Internals.Dialog as IDialog
 import Internals.Document as IDocument
 import Internals.Palette as IPalette
 import Internals.Text as IText
+import UI
 
 
 type alias Canvas =
@@ -88,6 +50,10 @@ type alias Config =
 
 type alias Button msg =
     IButton.Button msg
+
+
+type alias Color =
+    IPalette.Color
 
 
 type alias Dialog msg =
@@ -110,36 +76,62 @@ type alias Hue =
     IPalette.Hue
 
 
+type alias Shade =
+    IPalette.Shade
+
+
 type alias Page msg =
     IDocument.Page msg
 
 
+configInit : { deviceWidth : Int, deviceHeight : Int } -> Config
 configInit =
     IConfig.init
 
 
+configOnResize : { deviceWidth : Int, deviceHeight : Int } -> Config -> Config
 configOnResize =
     IConfig.onResize
 
 
+configGetDeviceWidth : Config -> Int
+configGetDeviceWidth =
+    IConfig.getDeviceWidth
+
+
+configGetDeviceHeight : Config -> Int
+configGetDeviceHeight =
+    IConfig.getDeviceHeight
+
+
+button : String -> Button msg
 button =
     IButton.button
 
 
+buttonToUI : Config -> Button msg -> UI.Graphics msg
 buttonToUI =
     IButton.toUI
 
 
+buttonWithColors : Hue -> Button msg -> Button msg
 buttonWithColors =
     IButton.withColors
 
 
+buttonWithOnClick : msg -> Button msg -> Button msg
 buttonWithOnClick =
     IButton.withOnClick
 
 
+dialog : msg -> String -> UI.Graphics msg -> Dialog msg
 dialog =
     IDialog.dialog
+
+
+dialogMap : (a -> b) -> Dialog a -> Dialog b
+dialogMap =
+    IDialog.map
 
 
 document =
@@ -314,29 +306,36 @@ textHeaderTitle =
     IText.headerTitle
 
 
+rem : Config -> Float -> Int
 rem =
     IConfig.rem
 
 
+rem0d85 : Config -> Int
 rem0d85 =
     IConfig.rem0d85
 
 
+rem0d875 : Config -> Int
 rem0d875 =
     IConfig.rem0d875
 
 
+rem1 : Config -> Int
 rem1 =
     IConfig.rem1
 
 
+rem1d25 : Config -> Int
 rem1d25 =
     IConfig.rem1d25
 
 
+rem1d5 : Config -> Int
 rem1d5 =
     IConfig.rem1d5
 
 
+rem2 : Config -> Int
 rem2 =
     IConfig.rem2

@@ -6,6 +6,8 @@ import Main.Model exposing (Model, Pages(..))
 import Main.Msg exposing (Msg(..), PageMsg(..))
 import Pages.Basics.Model as Basics
 import Pages.Basics.Update as Basics
+import Pages.Complex.Model as Complex
+import Pages.Complex.Update as Complex
 import Pages.Core.Model as Core
 import Pages.Core.Update as Core
 import Pages.Route exposing (Route(..))
@@ -47,6 +49,16 @@ update msg model =
 forPage : PageMsg -> Pages -> ( Pages, Effects Msg )
 forPage msg model =
     case msg of
+        ForBasics pageMsg ->
+            case model of
+                BasicsPage pageModel ->
+                    Basics.update pageMsg pageModel
+                        |> Tuple.mapBoth BasicsPage
+                            (Effects.map (ForBasics >> ForPage))
+
+                _ ->
+                    ( model, Effects.none )
+
         ForCore pageMsg ->
             case model of
                 CorePage pageModel ->
@@ -57,12 +69,12 @@ forPage msg model =
                 _ ->
                     ( model, Effects.none )
 
-        ForBasics pageMsg ->
+        ForComplex pageMsg ->
             case model of
-                BasicsPage pageModel ->
-                    Basics.update pageMsg pageModel
-                        |> Tuple.mapBoth BasicsPage
-                            (Effects.map (ForBasics >> ForPage))
+                ComplexPage pageModel ->
+                    Complex.update pageMsg pageModel
+                        |> Tuple.mapBoth ComplexPage
+                            (Effects.map (ForComplex >> ForPage))
 
                 _ ->
                     ( model, Effects.none )
@@ -77,8 +89,11 @@ pageChange route model =
             )
     in
     case route of
+        GoToBasics ->
+            pageApply BasicsPage ForBasics Basics.init
+
         GoToCore ->
             pageApply CorePage ForCore Core.init
 
-        GoToBasics ->
-            pageApply BasicsPage ForBasics Basics.init
+        GoToComplex ->
+            pageApply ComplexPage ForComplex Complex.init

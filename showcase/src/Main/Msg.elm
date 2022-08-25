@@ -2,6 +2,7 @@ module Main.Msg exposing (Msg(..), PageMsg(..))
 
 import DesignSystem as DS
 import Pages.Basics.Msg as Basics
+import Pages.Complex.Msg as Complex
 import Pages.Core.Msg as Core
 import Pages.Route exposing (Route)
 
@@ -14,5 +15,6 @@ type Msg
 
 
 type PageMsg
-    = ForCore Core.Msg
-    | ForBasics Basics.Msg
+    = ForBasics Basics.Msg
+    | ForCore Core.Msg
+    | ForComplex Complex.Msg

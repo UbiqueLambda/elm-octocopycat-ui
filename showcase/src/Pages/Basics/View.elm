@@ -30,6 +30,10 @@ view ds model canvas =
                 )
         , UI.indexedColumn
             [ buttonsView ds
+            , badgesView ds
+            , tabsView ds
+            , radioView ds
+            , alertsView ds
             ]
             |> UI.withWidth (canvas.width - 382)
             |> UI.withHeight (canvas.height - 32)
@@ -42,21 +46,23 @@ view ds model canvas =
         |> DS.pageWithDialog (dialogSetup ds model.dialog)
 
 
+buttonsView : DS.Config -> UI.Graphics Msg
 buttonsView ds =
     UI.indexedColumn
         [ DS.textHeaderTitle ds "Buttons"
         , UI.indexedRow
-            [ button "Background" ds DS.background
-            , button "Primary" ds DS.primary
-            , button "Success" ds DS.success
-            , button "Danger" ds DS.danger
+            [ button ds "Background" DS.background
+            , button ds "Primary" DS.primary
+            , button ds "Success" DS.success
+            , button ds "Danger" DS.danger
             ]
             |> UI.withSpacing 16
         ]
         |> UI.withSpacing 16
 
 
-button label ds hue =
+button : DS.Config -> String -> DS.Hue -> UI.Graphics Msg
+button ds label hue =
     UI.indexedColumn
         [ DS.textH4 ds label
         , DS.button "Go to Google"
@@ -67,6 +73,7 @@ button label ds hue =
         |> UI.withSpacing 16
 
 
+dialogSetup : DS.Config -> Maybe Dialog -> Maybe (DS.Dialog Msg)
 dialogSetup ds dialogModel =
     case dialogModel of
         Just (ButtonDemo buttonName) ->
@@ -82,3 +89,39 @@ dialogSetup ds dialogModel =
 
         Nothing ->
             Nothing
+
+
+badgesView : DS.Config -> UI.Graphics msg
+badgesView ds =
+    UI.indexedColumn
+        [ DS.textHeaderTitle ds "Badges"
+        , DS.textBody ds "(Not ready yet.)"
+        ]
+        |> UI.withSpacing 16
+
+
+tabsView : DS.Config -> UI.Graphics msg
+tabsView ds =
+    UI.indexedColumn
+        [ DS.textHeaderTitle ds "Tabs"
+        , DS.textBody ds "(Not ready yet.)"
+        ]
+        |> UI.withSpacing 16
+
+
+radioView : DS.Config -> UI.Graphics msg
+radioView ds =
+    UI.indexedColumn
+        [ DS.textHeaderTitle ds "Radio Buttons"
+        , DS.textBody ds "(Not ready yet.)"
+        ]
+        |> UI.withSpacing 16
+
+
+alertsView : DS.Config -> UI.Graphics msg
+alertsView ds =
+    UI.indexedColumn
+        [ DS.textHeaderTitle ds "Alerts"
+        , DS.textBody ds "(Not ready yet.)"
+        ]
+        |> UI.withSpacing 16

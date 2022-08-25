@@ -4,6 +4,7 @@ import DesignSystem as DS
 import Effects exposing (Effects)
 import Main.Msg as Msg exposing (Msg)
 import Pages.Basics.Model as Basics
+import Pages.Complex.Model as Complex
 import Pages.Core.Model as Core
 
 
@@ -21,8 +22,9 @@ type alias Model =
 
 
 type Pages
-    = CorePage Core.Model
-    | BasicsPage Basics.Model
+    = BasicsPage Basics.Model
+    | CorePage Core.Model
+    | ComplexPage Complex.Model
 
 
 init : Flags -> ( Model, Effects Msg )
