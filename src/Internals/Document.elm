@@ -32,14 +32,14 @@ type Document msg
         }
 
 
-type Msg
-    = ForHeader Header.Msg
-
-
 type Model
     = Model
         { header : Header.Model
         }
+
+
+type Msg
+    = ForHeader Header.Msg
 
 
 type Page msg
@@ -69,11 +69,6 @@ init =
     Model
         { header = Header.init
         }
-
-
-update : Msg -> Model -> ( Model, Effects Msg )
-update _ model =
-    ( model, Effects.none )
 
 
 page : String -> UI.Graphics msg -> Page msg
@@ -112,25 +107,13 @@ toElmDocument :
         }
 toElmDocument encoder ds (Document toParentMsg { header, footer }) pageFn =
     let
-        deviceWidth =
-            Config.getDeviceWidth ds
-
-        deviceHeight =
-            Config.getDeviceHeight ds
+        bodyCanvas =
+            { width = deviceWidth, height = bodyHeight, clipX = True, clipY = False }
 
         bodyHeight =
             deviceHeight
                 - Header.height ds header
                 - Footer.height ds footer
-
-        rootFontSize =
-            Config.rem1 ds
-
-        bodyCanvas =
-            { width = deviceWidth, height = bodyHeight, clipX = True, clipY = False }
-
-        (Page page_) =
-            pageFn bodyCanvas
 
         contentView =
             UI.column
@@ -158,9 +141,20 @@ toElmDocument encoder ds (Document toParentMsg { header, footer }) pageFn =
 
                 Nothing ->
                     [ contentView ]
+
+        deviceHeight =
+            Config.getDeviceHeight ds
+
+        deviceWidth =
+            Config.getDeviceWidth ds
+
+        (Page page_) =
+            pageFn bodyCanvas
+
+        rootFontSize =
+            Config.rem1 ds
     in
-    { title = page_.title
-    , body =
+    { body =
         contentWithDialog
             |> UI.stack
             |> SSOT.withRootFontFamilies
@@ -169,7 +163,21 @@ toElmDocument encoder ds (Document toParentMsg { header, footer }) pageFn =
             |> Palette.withFontColor ds background100
             |> UI.withBackground (Palette.backgroundColor ds background800 |> Just)
             |> encoder
+    , title = page_.title
     }
+
+
+update : Msg -> Model -> ( Model, Effects Msg )
+update msg (Model model) =
+    case msg of
+        ForHeader headerMsg ->
+            let
+                ( newHeaderModel, headerEffects ) =
+                    Header.update headerMsg model.header
+            in
+            ( Model { model | header = newHeaderModel }
+            , Effects.map ForHeader headerEffects
+            )
 
 
 dialogOverlay : Config -> Int -> Int -> ( String, UI.Graphics msg )

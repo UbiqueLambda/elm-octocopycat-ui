@@ -28,16 +28,6 @@ button label =
         }
 
 
-withColors : Hue -> Button msg -> Button msg
-withColors newHue (Button button_) =
-    Button { button_ | hue = newHue }
-
-
-withOnClick : msg -> Button msg -> Button msg
-withOnClick onClickMsg (Button button_) =
-    Button { button_ | onClickMsg = Just onClickMsg }
-
-
 toUI : Config -> Button msg -> UI.Graphics msg
 toUI ds (Button button_) =
     let
@@ -63,6 +53,16 @@ toUI ds (Button button_) =
         |> uiWithOnClick
 
 
+withColors : Hue -> Button msg -> Button msg
+withColors newHue (Button button_) =
+    Button { button_ | hue = newHue }
+
+
+withOnClick : msg -> Button msg -> Button msg
+withOnClick onClickMsg (Button button_) =
+    Button { button_ | onClickMsg = Just onClickMsg }
+
+
 {-| (background, text, border)
 -}
 colors : Config -> Palette.Hue -> ( UI.Color, UI.Color, UI.Color )
@@ -74,10 +74,10 @@ colors (Config { theme }) hue =
             , theme.background.shade300
             )
 
-        Palette.Success ->
-            ( theme.success.shade800
-            , theme.background.shade100
-            , theme.success.shade800
+        Palette.Primary ->
+            ( theme.background.shade500
+            , theme.primary.shade200
+            , theme.background.shade500
             )
 
         Palette.Danger ->
@@ -86,10 +86,10 @@ colors (Config { theme }) hue =
             , theme.background.shade500
             )
 
-        Palette.Primary ->
-            ( theme.background.shade500
-            , theme.primary.shade200
-            , theme.background.shade500
+        Palette.Success ->
+            ( theme.success.shade800
+            , theme.background.shade100
+            , theme.success.shade800
             )
 
 
@@ -99,14 +99,14 @@ hoverColors (Config { theme }) hue =
         Palette.Background ->
             ( theme.background.shade200, theme.background.shade100 )
 
-        Palette.Success ->
-            ( theme.success.shade400, theme.background.shade100 )
+        Palette.Primary ->
+            ( theme.background.shade300, theme.primary.shade200 )
 
         Palette.Danger ->
             ( theme.danger.shade600, theme.background.shade100 )
 
-        Palette.Primary ->
-            ( theme.background.shade300, theme.primary.shade200 )
+        Palette.Success ->
+            ( theme.success.shade400, theme.background.shade100 )
 
 
 

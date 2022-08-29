@@ -26,7 +26,7 @@ map applier (Dialog dialog_) =
 
 
 view : Config -> Int -> Int -> Dialog msg -> ( String, UI.Graphics msg )
-view ds screenWidth screenHeight (Dialog { contents, title, closeMsg }) =
+view ds screenWidth screenHeight (Dialog { closeMsg, title, contents }) =
     let
         width_ =
             if screenWidth < 640 then

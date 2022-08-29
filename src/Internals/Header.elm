@@ -10,7 +10,7 @@ module Internals.Header exposing
     , withItems
     )
 
-import Internals.Config as Config exposing (Config)
+import Internals.Config exposing (Config)
 import Internals.Effects as Effects exposing (Effects)
 import Internals.Palette as Palette exposing (background600)
 import Internals.Text as Text
@@ -29,19 +29,19 @@ type Msg
     = ToggleDropdown Bool
 
 
-init : Model
-init =
-    Model { dropdownOpen = False }
-
-
 header : Model -> Header msg
 header _ =
     Header { items = [], currentPage = Nothing }
 
 
-withItems : List ( String, msg ) -> Header msg -> Header msg
-withItems items (Header header_) =
-    Header { header_ | items = items }
+height : Config -> Header msg -> Int
+height _ _ =
+    62
+
+
+init : Model
+init =
+    Model { dropdownOpen = False }
 
 
 update : Msg -> Model -> ( Model, Effects Msg )
@@ -64,13 +64,13 @@ view ds _ width (Header { items }) =
             (Palette.backgroundColor ds background600 |> Just)
 
 
+withItems : List ( String, msg ) -> Header msg -> Header msg
+withItems items (Header header_) =
+    Header { header_ | items = items }
+
+
 itemView : Config -> ( String, msg ) -> UI.Graphics msg
 itemView ds ( label, msg ) =
     Text.h5 ds label
         |> UI.withAlignSelf UI.center
         |> UI.withOnClick msg
-
-
-height : Config -> Header msg -> Int
-height _ _ =
-    62

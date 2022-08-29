@@ -32,7 +32,7 @@ main =
                     |> Tuple.mapSecond performEffects
         , view =
             \model ->
-                DS.documentToElmDocument
+                DS.documentToElm
                     (UIHtml.encode htmlEncoder)
                     model.ds
                     (View.document model)

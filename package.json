@@ -9,7 +9,8 @@
     "elm-review": "^2.7.3"
   },
   "scripts": {
-    "review": "elm-review --template UbiqueLambda/elm-review-config",
+    "review:package": "elm-review --template UbiqueLambda/elm-review-config",
+    "review:showcase": "cd showcase && elm-review --template UbiqueLambda/elm-review-config --ignore-files ../src/DS.elm",
     "showcase": "cd showcase && elm reactor"
   }
 }

@@ -31,91 +31,23 @@ type Config
         }
 
 
-init : { deviceWidth : Int, deviceHeight : Int } -> Config
-init { deviceWidth, deviceHeight } =
-    Config
-        { theme = defaultTheme
-        , terms = defaultTerms
-        , deviceWidth = deviceWidth
-        , deviceHeight = deviceHeight
-        , fontSizes = calcFontSizes 16
-        }
+type alias FullHueStages =
+    { shade100 : UI.Color
+    , shade200 : UI.Color
+    , shade300 : UI.Color
+    , shade400 : UI.Color
+    , shade500 : UI.Color
+    , shade600 : UI.Color
+    , shade700 : UI.Color
+    , shade800 : UI.Color
+    }
 
 
-onResize : { deviceWidth : Int, deviceHeight : Int } -> Config -> Config
-onResize { deviceWidth, deviceHeight } (Config config) =
-    Config
-        { config
-            | deviceWidth = deviceWidth
-            , deviceHeight = deviceHeight
-        }
-
-
-getDeviceWidth : Config -> Int
-getDeviceWidth (Config { deviceWidth }) =
-    deviceWidth
-
-
-getDeviceHeight : Config -> Int
-getDeviceHeight (Config { deviceHeight }) =
-    deviceHeight
-
-
-getTerms : Config -> Terms
-getTerms (Config { terms }) =
-    terms
-
-
-rem0d85 : Config -> Int
-rem0d85 (Config { fontSizes }) =
-    fontSizes.r0d85
-
-
-rem0d875 : Config -> Int
-rem0d875 (Config { fontSizes }) =
-    fontSizes.r0d875
-
-
-rem1 : Config -> Int
-rem1 (Config { fontSizes }) =
-    fontSizes.r1
-
-
-rem1d25 : Config -> Int
-rem1d25 (Config { fontSizes }) =
-    fontSizes.r1d25
-
-
-rem1d5 : Config -> Int
-rem1d5 (Config { fontSizes }) =
-    fontSizes.r1d5
-
-
-rem2 : Config -> Int
-rem2 (Config { fontSizes }) =
-    fontSizes.r2
-
-
-rem : Config -> Float -> Int
-rem (Config { fontSizes }) rem_ =
-    floor (toFloat fontSizes.r1 * rem_)
-
-
-calcFontSizes : Int -> FontSizes
-calcFontSizes rootFontSize =
-    let
-        rootFontSizeFloat =
-            toFloat rootFontSize
-
-        calcFloat rem_ =
-            floor (rootFontSizeFloat * rem_)
-    in
-    { r0d85 = calcFloat 0.85
-    , r0d875 = calcFloat 0.875
-    , r1 = rootFontSize
-    , r1d25 = calcFloat 1.25
-    , r1d5 = calcFloat 1.5
-    , r2 = rootFontSize * 2
+type alias ShortHueStages =
+    { shade200 : UI.Color
+    , shade400 : UI.Color
+    , shade600 : UI.Color
+    , shade800 : UI.Color
     }
 
 
@@ -148,23 +80,91 @@ type alias FontSizes =
     }
 
 
-type alias ShortHueStages =
-    { shade200 : UI.Color
-    , shade400 : UI.Color
-    , shade600 : UI.Color
-    , shade800 : UI.Color
-    }
+getDeviceHeight : Config -> Int
+getDeviceHeight (Config { deviceHeight }) =
+    deviceHeight
 
 
-type alias FullHueStages =
-    { shade100 : UI.Color
-    , shade200 : UI.Color
-    , shade300 : UI.Color
-    , shade400 : UI.Color
-    , shade500 : UI.Color
-    , shade600 : UI.Color
-    , shade700 : UI.Color
-    , shade800 : UI.Color
+getDeviceWidth : Config -> Int
+getDeviceWidth (Config { deviceWidth }) =
+    deviceWidth
+
+
+getTerms : Config -> Terms
+getTerms (Config { terms }) =
+    terms
+
+
+init : { deviceHeight : Int, deviceWidth : Int } -> Config
+init { deviceHeight, deviceWidth } =
+    Config
+        { theme = defaultTheme
+        , deviceWidth = deviceWidth
+        , deviceHeight = deviceHeight
+        , terms = defaultTerms
+        , fontSizes = calcFontSizes 16
+        }
+
+
+onResize : { deviceHeight : Int, deviceWidth : Int } -> Config -> Config
+onResize { deviceHeight, deviceWidth } (Config config) =
+    Config
+        { config
+            | deviceWidth = deviceWidth
+            , deviceHeight = deviceHeight
+        }
+
+
+rem : Config -> Float -> Int
+rem (Config { fontSizes }) rem_ =
+    floor (toFloat fontSizes.r1 * rem_)
+
+
+rem0d85 : Config -> Int
+rem0d85 (Config { fontSizes }) =
+    fontSizes.r0d85
+
+
+rem0d875 : Config -> Int
+rem0d875 (Config { fontSizes }) =
+    fontSizes.r0d875
+
+
+rem1 : Config -> Int
+rem1 (Config { fontSizes }) =
+    fontSizes.r1
+
+
+rem1d25 : Config -> Int
+rem1d25 (Config { fontSizes }) =
+    fontSizes.r1d25
+
+
+rem1d5 : Config -> Int
+rem1d5 (Config { fontSizes }) =
+    fontSizes.r1d5
+
+
+rem2 : Config -> Int
+rem2 (Config { fontSizes }) =
+    fontSizes.r2
+
+
+calcFontSizes : Int -> FontSizes
+calcFontSizes rootFontSize =
+    let
+        calcFloat rem_ =
+            floor (rootFontSizeFloat * rem_)
+
+        rootFontSizeFloat =
+            toFloat rootFontSize
+    in
+    { r0d85 = calcFloat 0.85
+    , r0d875 = calcFloat 0.875
+    , r1 = rootFontSize
+    , r1d25 = calcFloat 1.25
+    , r1d5 = calcFloat 1.5
+    , r2 = rootFontSize * 2
     }
 
 
@@ -178,32 +178,32 @@ defaultTerms =
 
 defaultTheme =
     { background =
-        { shade800 = UI.intRGBA 0x010409FF
-        , shade700 = UI.intRGBA 0x0D1117FF
-        , shade600 = UI.intRGBA 0x161B22FF
-        , shade500 = UI.intRGBA 0x21262DFF
-        , shade400 = UI.intRGBA 0x2B2A33FF
-        , shade300 = UI.intRGBA 0x30363DFF
+        { shade100 = UI.intRGBA 0xF0F6FCFF
         , shade200 = UI.intRGBA 0x8B949EFF
-        , shade100 = UI.intRGBA 0xF0F6FCFF
+        , shade300 = UI.intRGBA 0x30363DFF
+        , shade400 = UI.intRGBA 0x2B2A33FF
+        , shade500 = UI.intRGBA 0x21262DFF
+        , shade600 = UI.intRGBA 0x161B22FF
+        , shade700 = UI.intRGBA 0x0D1117FF
+        , shade800 = UI.intRGBA 0x010409FF
         }
     , primary =
-        { shade800 = UI.intRGBA 0x132339FF
-        , shade600 = UI.intRGBA 0x214C87FF
+        { shade200 = UI.intRGBA 0x58A6FFFF
         , shade400 = UI.intRGBA 0x549EF5FF
-        , shade200 = UI.intRGBA 0x58A6FFFF
+        , shade600 = UI.intRGBA 0x214C87FF
+        , shade800 = UI.intRGBA 0x132339FF
         }
     , danger =
-        { shade800 = UI.intRGBA 0x6B2A2BFF
-        , shade600 = UI.intRGBA 0xDA3633FF
+        { shade200 = UI.intRGBA 0xF85149FF
         , shade400 = UI.intRGBA 0xF75048FF
-        , shade200 = UI.intRGBA 0xF85149FF
+        , shade600 = UI.intRGBA 0xDA3633FF
+        , shade800 = UI.intRGBA 0x6B2A2BFF
         }
     , success =
-        { shade800 = UI.intRGBA 0x238636FF
-        , shade600 = UI.intRGBA 0x2A943EFF
+        { shade200 = UI.intRGBA 0x41A956FF
         , shade400 = UI.intRGBA 0x2EA043FF
-        , shade200 = UI.intRGBA 0x41A956FF
+        , shade600 = UI.intRGBA 0x2A943EFF
+        , shade800 = UI.intRGBA 0x238636FF
         }
     , tabShadow = UI.intRGBA 0xF78166FF
     }

@@ -43,11 +43,13 @@ import Internals.Config exposing (Config(..))
 import UI
 
 
-type Shade
-    = Shade200
-    | Shade400
-    | Shade600
-    | Shade800
+type Color
+    = Color Hue Shade
+    | Background100
+    | Background300
+    | Background500
+    | Background700
+    | TabShadow
 
 
 type Hue
@@ -57,43 +59,11 @@ type Hue
     | Success
 
 
-type Color
-    = Color Hue Shade
-    | Background100
-    | Background300
-    | Background500
-    | Background700
-    | TabShadow -- Avoid having something like this
-
-
-color : Hue -> Shade -> Color
-color hue shade =
-    Color hue shade
-
-
-colorTabShadow : Color
-colorTabShadow =
-    TabShadow
-
-
-shade200 : Shade
-shade200 =
-    Shade200
-
-
-shade400 : Shade
-shade400 =
-    Shade400
-
-
-shade600 : Shade
-shade600 =
-    Shade600
-
-
-shade800 : Shade
-shade800 =
-    Shade800
+type Shade
+    = Shade200
+    | Shade400
+    | Shade600
+    | Shade800 -- Avoid having something like this
 
 
 background : Hue
@@ -141,29 +111,24 @@ background800 =
     Color Background Shade800
 
 
-primary : Hue
-primary =
-    Primary
+backgroundColor : Config -> Color -> UI.Background
+backgroundColor ds color_ =
+    UI.backgroundColor (toUI ds color_)
 
 
-primary200 : Color
-primary200 =
-    Color Primary Shade200
+borderWithColor : Config -> Color -> UI.Border -> UI.Border
+borderWithColor ds color_ =
+    UI.borderWithColor (toUI ds color_)
 
 
-primary400 : Color
-primary400 =
-    Color Primary Shade400
+color : Hue -> Shade -> Color
+color hue shade =
+    Color hue shade
 
 
-primary600 : Color
-primary600 =
-    Color Primary Shade600
-
-
-primary800 : Color
-primary800 =
-    Color Primary Shade800
+colorTabShadow : Color
+colorTabShadow =
+    TabShadow
 
 
 danger : Hue
@@ -189,6 +154,56 @@ danger600 =
 danger800 : Color
 danger800 =
     Color Danger Shade800
+
+
+primary : Hue
+primary =
+    Primary
+
+
+primary200 : Color
+primary200 =
+    Color Primary Shade200
+
+
+primary400 : Color
+primary400 =
+    Color Primary Shade400
+
+
+primary600 : Color
+primary600 =
+    Color Primary Shade600
+
+
+primary800 : Color
+primary800 =
+    Color Primary Shade800
+
+
+shade200 : Shade
+shade200 =
+    Shade200
+
+
+shade400 : Shade
+shade400 =
+    Shade400
+
+
+shade600 : Shade
+shade600 =
+    Shade600
+
+
+shade800 : Shade
+shade800 =
+    Shade800
+
+
+shadowWithColor : Config -> Color -> UI.Shadow -> UI.Shadow
+shadowWithColor ds color_ =
+    UI.shadowWithColor (toUI ds color_)
 
 
 success : Hue
@@ -219,9 +234,6 @@ success800 =
 toUI : Config -> Color -> UI.Color
 toUI (Config { theme }) color_ =
     case color_ of
-        TabShadow ->
-            theme.tabShadow
-
         Color Background shade ->
             shadeFromHue theme.background shade
 
@@ -246,6 +258,14 @@ toUI (Config { theme }) color_ =
         Background700 ->
             theme.background.shade700
 
+        TabShadow ->
+            theme.tabShadow
+
+
+withFontColor : Config -> Color -> UI.Graphics msg -> UI.Graphics msg
+withFontColor ds color_ =
+    UI.withFontColor (toUI ds color_)
+
 
 shadeFromHue : { x | shade200 : UI.Color, shade400 : UI.Color, shade600 : UI.Color, shade800 : UI.Color } -> Shade -> UI.Color
 shadeFromHue stages shade =
@@ -261,23 +281,3 @@ shadeFromHue stages shade =
 
         Shade800 ->
             stages.shade800
-
-
-backgroundColor : Config -> Color -> UI.Background
-backgroundColor ds color_ =
-    UI.backgroundColor (toUI ds color_)
-
-
-withFontColor : Config -> Color -> UI.Graphics msg -> UI.Graphics msg
-withFontColor ds color_ =
-    UI.withFontColor (toUI ds color_)
-
-
-shadowWithColor : Config -> Color -> UI.Shadow -> UI.Shadow
-shadowWithColor ds color_ =
-    UI.shadowWithColor (toUI ds color_)
-
-
-borderWithColor : Config -> Color -> UI.Border -> UI.Border
-borderWithColor ds color_ =
-    UI.borderWithColor (toUI ds color_)

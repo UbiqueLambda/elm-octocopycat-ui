@@ -13,14 +13,6 @@ body (Config { fontSizes }) =
         >> UI.withFontWeight 400
 
 
-headerTitle : Config -> String -> UI.Graphics msgh
-headerTitle (Config { fontSizes }) =
-    UI.spanText
-        >> SSOT.withRootFontFamilies
-        >> UI.withFontSize fontSizes.r2
-        >> UI.withFontWeight 400
-
-
 h1 : Config -> String -> UI.Graphics msgh
 h1 (Config { fontSizes }) =
     UI.spanText
@@ -67,3 +59,11 @@ h6 (Config { fontSizes }) =
         >> SSOT.withRootFontFamilies
         >> UI.withFontSize fontSizes.r0d85
         >> UI.withFontWeight 600
+
+
+headerTitle : Config -> String -> UI.Graphics msgh
+headerTitle (Config { fontSizes }) =
+    UI.spanText
+        >> SSOT.withRootFontFamilies
+        >> UI.withFontSize fontSizes.r2
+        >> UI.withFontWeight 400
